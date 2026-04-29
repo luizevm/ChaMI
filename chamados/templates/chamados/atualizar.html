@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ChaMI - Atualizar Chamado</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Atualizar Chamado #{{ chamado.id }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Imóvel</label>
+            {{ form.imovel }}
+        </div>
+        <div class="form-group">
+            <label>Categoria</label>
+            {{ form.categoria }}
+        </div>
+        <div class="form-group">
+            <label>Descrição</label>
+            {{ form.descricao }}
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            {{ form.status }}
+        </div>
+        <div class="form-group">
+            <label>Prestador de Serviço</label>
+            {{ form.prestador }}
+        </div>
+        <div class="form-group">
+            <label>Orçamento (R$)</label>
+            {{ form.orcamento }}
+        </div>
+        <div class="form-group">
+            <label>Valor Final (R$)</label>
+            {{ form.valor_final }}
+        </div>
+        <div class="form-group">
+            <label>Observação</label>
+            {{ form.observacao }}
+        </div>
+        <div class="form-group">
+            <label>Anexo (nota fiscal, foto)</label>
+            {{ form.anexo }}
+        </div>
+        <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+        <a href="{% url 'detalhar_chamado' chamado.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

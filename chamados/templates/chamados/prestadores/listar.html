@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ChaMI - Prestadores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Prestadores de Serviço</h2>
+    <a href="{% url 'cadastrar_prestador' %}" class="btn btn-primary mb-3">Novo Prestador</a>
+    <a href="{% url 'listar_chamados' %}" class="btn btn-secondary mb-3">Voltar</a>
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Área</th>
+                <th>Telefone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestador in prestadores %}
+            <tr>
+                <td>{{ prestador.id }}</td>
+                <td>{{ prestador.nome }}</td>
+                <td>{{ prestador.area }}</td>
+                <td>{{ prestador.telefone }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Nenhum prestador cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
