@@ -260,3 +260,43 @@ def resolver_internamente(request, pk):
         chamado.save()
         return redirect('detalhar_chamado', pk=chamado.pk)
     return render(request, 'chamados/resolver_internamente.html', {'chamado': chamado})
+
+@login_required
+def editar_imovel(request, pk):
+    imovel = get_object_or_404(Imovel, pk=pk)
+    if request.method == 'POST':
+        form = ImovelForm(request.POST, instance=imovel)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_imoveis')
+    else:
+        form = ImovelForm(instance=imovel)
+    return render(request, 'chamados/imoveis/editar.html', {'form': form, 'imovel': imovel})
+
+@login_required
+def excluir_imovel(request, pk):
+    imovel = get_object_or_404(Imovel, pk=pk)
+    if request.method == 'POST':
+        imovel.delete()
+        return redirect('listar_imoveis')
+    return render(request, 'chamados/imoveis/excluir.html', {'imovel': imovel})
+
+@login_required
+def editar_prestador(request, pk):
+    prestador = get_object_or_404(Prestador, pk=pk)
+    if request.method == 'POST':
+        form = PrestadorForm(request.POST, instance=prestador)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_prestadores')
+    else:
+        form = PrestadorForm(instance=prestador)
+    return render(request, 'chamados/prestadores/editar.html', {'form': form, 'prestador': prestador})
+
+@login_required
+def excluir_prestador(request, pk):
+    prestador = get_object_or_404(Prestador, pk=pk)
+    if request.method == 'POST':
+        prestador.delete()
+        return redirect('listar_prestadores')
+    return render(request, 'chamados/prestadores/excluir.html', {'prestador': prestador})

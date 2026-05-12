@@ -22,11 +22,15 @@ urlpatterns = [
     # Imóveis
     path('imoveis/', views.listar_imoveis, name='listar_imoveis'),
     path('imoveis/cadastrar/', views.cadastrar_imovel, name='cadastrar_imovel'),
+    path('imoveis/<int:pk>/editar/', views.editar_imovel, name='editar_imovel'),
+    path('imoveis/<int:pk>/excluir/', views.excluir_imovel, name='excluir_imovel'),
 
     # Prestadores
     path('prestadores/', views.listar_prestadores, name='listar_prestadores'),
     path('prestadores/cadastrar/', views.cadastrar_prestador, name='cadastrar_prestador'),
     path('prestadores/cadastrar-usuario/', views.cadastrar_prestador_user, name='cadastrar_prestador_user'),
+    path('prestadores/<int:pk>/editar/', views.editar_prestador, name='editar_prestador'),
+    path('prestadores/<int:pk>/excluir/', views.excluir_prestador, name='excluir_prestador'),
 
     # Inquilinos
     path('inquilinos/', views.listar_inquilinos, name='listar_inquilinos'),

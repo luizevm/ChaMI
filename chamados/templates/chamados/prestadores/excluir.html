@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ChaMI - Excluir Prestador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Excluir Prestador</h2>
+
+    <div class="alert alert-danger">
+        Tem certeza que deseja excluir este prestador?
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Nome:</strong> {{ prestador.nome }}</p>
+            <p><strong>Área:</strong> {{ prestador.area }}</p>
+            <p><strong>Telefone:</strong> {{ prestador.telefone }}</p>
+        </div>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        <a href="{% url 'listar_prestadores' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ChaMI - Editar Imóvel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Editar Imóvel</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Endereço</label>
+            {{ form.endereco }}
+        </div>
+        <div class="form-group">
+            <label>Complemento</label>
+            {{ form.complemento }}
+        </div>
+        <div class="form-group">
+            <label>Inquilino</label>
+            {{ form.inquilino }}
+        </div>
+        <div class="form-group">
+            <label>Telefone</label>
+            {{ form.telefone }}
+        </div>
+        <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+        <a href="{% url 'listar_imoveis' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

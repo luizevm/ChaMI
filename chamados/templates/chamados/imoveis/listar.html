@@ -19,6 +19,7 @@
                 <th>Complemento</th>
                 <th>Inquilino</th>
                 <th>Telefone</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -29,10 +30,14 @@
                 <td>{{ imovel.complemento|default:"-" }}</td>
                 <td>{{ imovel.inquilino }}</td>
                 <td>{{ imovel.telefone }}</td>
+                <td>
+                    <a href="{% url 'editar_imovel' imovel.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'excluir_imovel' imovel.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">Nenhum imóvel cadastrado.</td>
+                <td colspan="6" class="text-center">Nenhum imóvel cadastrado.</td>
             </tr>
             {% endfor %}
         </tbody>
