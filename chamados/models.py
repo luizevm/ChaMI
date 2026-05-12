@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Imovel(models.Model):
     endereco = models.CharField(max_length=255)
@@ -19,10 +20,16 @@ class Prestador(models.Model):
 
 class Chamado(models.Model):
     STATUS_CHOICES = [
-        ('aberto', 'Aberto'),
-        ('em_andamento', 'Em Andamento'),
-        ('concluido', 'Concluído'),
-    ]
+    ('aberto', 'Aberto'),
+    ('aguardando_orcamento', 'Aguardando Orçamento'),
+    ('orcamento_enviado', 'Orçamento Enviado'),
+    ('orcamento_aprovado', 'Orçamento Aprovado'),
+    ('orcamento_reprovado', 'Orçamento Reprovado'),
+    ('em_andamento', 'Em Andamento'),
+    ('resolvido_internamente', 'Resolvido Internamente'),
+    ('concluido', 'Concluído'),
+    ('cancelado', 'Cancelado'),
+]
 
     CATEGORIA_CHOICES = [
         ('eletrica', 'Elétrica'),
@@ -34,7 +41,7 @@ class Chamado(models.Model):
     imovel = models.ForeignKey(Imovel, on_delete=models.CASCADE)
     descricao = models.TextField()
     categoria = models.CharField(max_length=50, choices=CATEGORIA_CHOICES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='aberto')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='aberto')
     data_abertura = models.DateTimeField(auto_now_add=True)
     observacao = models.TextField(blank=True, null=True)
     prestador = models.ForeignKey(Prestador, on_delete=models.SET_NULL, blank=True, null=True)
@@ -44,3 +51,18 @@ class Chamado(models.Model):
 
     def __str__(self):
         return f'Chamado #{self.id} - {self.imovel}'
+
+class Perfil(models.Model):
+    TIPO_CHOICES = [
+        ('admin', 'Administrador'),
+        ('inquilino', 'Inquilino'),
+        ('prestador', 'Prestador'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
+    imovel = models.ForeignKey(Imovel, on_delete=models.SET_NULL, blank=True, null=True)
+    prestador = models.ForeignKey(Prestador, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.user.username} — {self.get_tipo_display()}'

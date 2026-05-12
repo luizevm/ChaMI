@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ChaMI - Cadastrar Inquilino</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Cadastrar Inquilino</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Nome completo</label>
+            {{ form.nome }}
+        </div>
+        <div class="form-group">
+            <label>CPF (somente números)</label>
+            {{ form.cpf }}
+        </div>
+        <div class="form-group">
+            <label>Senha temporária</label>
+            {{ form.senha }}
+        </div>
+        <div class="form-group">
+            <label>Imóvel</label>
+            {{ form.imovel }}
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <a href="{% url 'listar_inquilinos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
