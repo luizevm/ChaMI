@@ -1,30 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>ChaMI - Abrir Chamado</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-4">
-    <h2>Abrir Chamado</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group">
-            <label>Imóvel</label>
-            {{ form.imovel }}
-        </div>
-        <div class="form-group">
-            <label>Categoria</label>
-            {{ form.categoria }}
-        </div>
-        <div class="form-group">
-            <label>Descrição do Problema</label>
-            {{ form.descricao }}
-        </div>
-        <button type="submit" class="btn btn-primary">Abrir Chamado</button>
-        <a href="{% url 'listar_chamados' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+{% extends 'chamados/base.html' %}
+{% block title %}Abrir Chamado{% endblock %}
+
+{% block content %}
+<h2>Abrir Chamado</h2>
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Imóvel</label>
+                {{ form.imovel }}
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                {{ form.categoria }}
+            </div>
+            <div class="form-group">
+                <label>Descrição do Problema</label>
+                {{ form.descricao }}
+            </div>
+            <button type="submit" class="btn btn-primary">Abrir Chamado</button>
+            <a href="{% url 'listar_chamados' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
 </div>
-</body>
-</html>
+{% endblock %}
