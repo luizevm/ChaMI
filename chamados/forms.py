@@ -44,3 +44,14 @@ class PrestadorUserForm(forms.Form):
 class OrcamentoForm(forms.Form):
     orcamento = forms.DecimalField(max_digits=10, decimal_places=2, label='Valor do Orçamento (R$)')
     observacao = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), label='Descrição do serviço')
+    
+class AdminForm(forms.Form):
+    nome = forms.CharField(max_length=100)
+    cpf = forms.CharField(max_length=11, help_text='Somente números')
+    senha = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data['cpf']
+        if User.objects.filter(username=cpf).exists():
+            raise forms.ValidationError('Este CPF já está cadastrado no sistema.')
+        return cpf
