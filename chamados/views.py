@@ -72,8 +72,23 @@ def listar_chamados(request):
 def abrir_chamado(request):
     if request.method == 'POST':
         form = AbrirChamadoForm(request.POST)
+        if not request.user.is_superuser:
+            try:
+                perfil = Perfil.objects.get(user=request.user)
+                if perfil.tipo == 'inquilino':
+                    form.fields['imovel'].required = False
+            except Perfil.DoesNotExist:
+                pass
         if form.is_valid():
-            form.save()
+            chamado = form.save(commit=False)
+            if not request.user.is_superuser:
+                try:
+                    perfil = Perfil.objects.get(user=request.user)
+                    if perfil.tipo == 'inquilino':
+                        chamado.imovel = perfil.imovel
+                except Perfil.DoesNotExist:
+                    pass
+            chamado.save()
             return redirect('listar_chamados')
     else:
         form = AbrirChamadoForm()
@@ -106,7 +121,10 @@ def atualizar_chamado(request, pk):
     if request.method == 'POST':
         form = AtualizarChamadoForm(request.POST, request.FILES, instance=chamado)
         if form.is_valid():
-            form.save()
+            chamado_atualizado = form.save(commit=False)
+            if chamado_atualizado.prestador and chamado.status == 'aberto':
+                chamado_atualizado.status = 'aguardando_orcamento'
+            chamado_atualizado.save()
             return redirect('detalhar_chamado', pk=chamado.pk)
     else:
         form = AtualizarChamadoForm(instance=chamado)
