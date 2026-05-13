@@ -1,25 +1,26 @@
 {% extends 'chamados/base.html' %}
-{% block title %}Cadastrar Prestador{% endblock %}
+{% block title %}Editar Acesso do Prestador{% endblock %}
 
 {% block content %}
-<h2>Cadastrar Prestador de Serviço</h2>
+<h2>Editar Acesso do Prestador</h2>
 <div class="card">
     <div class="card-body">
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
-                <label>Nome</label>
+                <label>Nome completo</label>
                 {{ form.nome }}
             </div>
             <div class="form-group">
-                <label>Área de Atuação</label>
-                {{ form.area }}
+                <label>Prestador</label>
+                {{ form.prestador }}
             </div>
             <div class="form-group">
-                <label>Telefone</label>
-                {{ form.telefone }}
+                <label>Nova Senha</label>
+                {{ form.nova_senha }}
+                <small class="form-text text-muted">Deixe em branco para não alterar.</small>
             </div>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
             <a href="{% url 'listar_prestadores' %}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>

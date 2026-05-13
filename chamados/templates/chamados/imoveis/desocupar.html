@@ -1,0 +1,29 @@
+{% extends 'chamados/base.html' %}
+{% block title %}Desocupar Imóvel{% endblock %}
+
+{% block content %}
+<h2>Desocupar Imóvel</h2>
+
+<div class="alert alert-warning">
+    Tem certeza que deseja desocupar este imóvel? O inquilino será desvinculado mas continuará no sistema.
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>Endereço:</strong> {{ imovel.endereco }}</p>
+        <p><strong>Tipo:</strong> {{ imovel.get_tipo_display }}</p>
+        {% for perfil in imovel.perfil_set.all %}
+            {% if perfil.tipo == 'inquilino' %}
+            <p><strong>Inquilino atual:</strong> {{ perfil.user.first_name }}</p>
+            <p><strong>CPF:</strong> {{ perfil.user.username }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning">Confirmar Desocupação</button>
+    <a href="{% url 'listar_imoveis' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

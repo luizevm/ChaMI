@@ -1,0 +1,41 @@
+{% extends 'chamados/base.html' %}
+{% block title %}Editar Inquilino{% endblock %}
+
+{% block content %}
+<h2>Editar Inquilino</h2>
+<div class="card">
+    <div class="card-body">
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <p>{{ field }}: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Nome completo</label>
+                {{ form.nome }}
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                {{ form.telefone }}
+            </div>
+            <div class="form-group">
+                <label>Imóvel</label>
+                {{ form.imovel }}
+            </div>
+            <div class="form-group">
+                <label>Nova Senha</label>
+                {{ form.nova_senha }}
+                <small class="form-text text-muted">Deixe em branco para não alterar.</small>
+            </div>
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+            <a href="{% url 'listar_inquilinos' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

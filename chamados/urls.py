@@ -24,6 +24,7 @@ urlpatterns = [
     path('imoveis/cadastrar/', views.cadastrar_imovel, name='cadastrar_imovel'),
     path('imoveis/<int:pk>/editar/', views.editar_imovel, name='editar_imovel'),
     path('imoveis/<int:pk>/excluir/', views.excluir_imovel, name='excluir_imovel'),
+    path('imoveis/<int:pk>/desocupar/', views.desocupar_imovel, name='desocupar_imovel'),
 
     # Prestadores
     path('prestadores/', views.listar_prestadores, name='listar_prestadores'),
@@ -31,12 +32,18 @@ urlpatterns = [
     path('prestadores/cadastrar-usuario/', views.cadastrar_prestador_user, name='cadastrar_prestador_user'),
     path('prestadores/<int:pk>/editar/', views.editar_prestador, name='editar_prestador'),
     path('prestadores/<int:pk>/excluir/', views.excluir_prestador, name='excluir_prestador'),
+    path('prestadores/usuarios/<int:pk>/editar/', views.editar_prestador_user, name='editar_prestador_user'),
+    path('prestadores/usuarios/<int:pk>/excluir/', views.excluir_prestador_user, name='excluir_prestador_user'),
 
     # Inquilinos
     path('inquilinos/', views.listar_inquilinos, name='listar_inquilinos'),
     path('inquilinos/cadastrar/', views.cadastrar_inquilino, name='cadastrar_inquilino'),
-    
+    path('inquilinos/<int:pk>/editar/', views.editar_inquilino, name='editar_inquilino'),
+    path('inquilinos/<int:pk>/excluir/', views.excluir_inquilino, name='excluir_inquilino'),
+
     # Admins
     path('admins/', views.listar_admins, name='listar_admins'),
     path('admins/cadastrar/', views.cadastrar_admin, name='cadastrar_admin'),
+    path('admins/<int:pk>/editar/', views.editar_admin, name='editar_admin'),
+    path('admins/<int:pk>/excluir/', views.excluir_admin, name='excluir_admin'),
 ]

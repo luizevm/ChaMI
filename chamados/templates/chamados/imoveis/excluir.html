@@ -1,31 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>ChaMI - Excluir Imóvel</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-4">
-    <h2>Excluir Imóvel</h2>
+{% extends 'chamados/base.html' %}
+{% block title %}Excluir Imóvel{% endblock %}
 
-    <div class="alert alert-danger">
-        Tem certeza que deseja excluir este imóvel? Todos os chamados vinculados a ele também serão excluídos!
-    </div>
+{% block content %}
+<h2>Excluir Imóvel</h2>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <p><strong>Endereço:</strong> {{ imovel.endereco }}</p>
-            <p><strong>Inquilino:</strong> {{ imovel.inquilino }}</p>
-            <p><strong>Telefone:</strong> {{ imovel.telefone }}</p>
-        </div>
-    </div>
-
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-        <a href="{% url 'listar_imoveis' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+<div class="alert alert-danger">
+    Tem certeza que deseja excluir este imóvel? Todos os chamados vinculados a ele também serão excluídos!
 </div>
-</body>
-</html>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>Endereço:</strong> {{ imovel.endereco }}</p>
+        <p><strong>Inquilino:</strong> {{ imovel.inquilino }}</p>
+        <p><strong>Telefone:</strong> {{ imovel.telefone }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+    <a href="{% url 'listar_imoveis' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

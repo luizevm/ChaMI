@@ -1,36 +1,33 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>ChaMI - Resolver Internamente</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-4">
-    <h2>Resolver Internamente — Chamado #{{ chamado.id }}</h2>
+{% extends 'chamados/base.html' %}
+{% block title %}Resolver Internamente{% endblock %}
 
-    <div class="alert alert-info">
-        O orçamento foi reprovado. Descreva como o problema será resolvido internamente.
-    </div>
+{% block content %}
+<h2>Resolver Internamente — Chamado #{{ chamado.id }}</h2>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <p><strong>Imóvel:</strong> {{ chamado.imovel }}</p>
-            <p><strong>Categoria:</strong> {{ chamado.get_categoria_display }}</p>
-            <p><strong>Descrição:</strong> {{ chamado.descricao }}</p>
-            <p><strong>Orçamento reprovado:</strong> R$ {{ chamado.orcamento }}</p>
-        </div>
-    </div>
-
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label>Observação</label>
-            <textarea name="observacao" class="form-control" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-info">Confirmar</button>
-        <a href="{% url 'detalhar_chamado' chamado.pk %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+<div class="alert alert-info">
+    O orçamento foi reprovado. Descreva como o problema será resolvido internamente.
 </div>
-</body>
-</html>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>Imóvel:</strong> {{ chamado.imovel }}</p>
+        <p><strong>Categoria:</strong> {{ chamado.get_categoria_display }}</p>
+        <p><strong>Descrição:</strong> {{ chamado.descricao }}</p>
+        <p><strong>Orçamento reprovado:</strong> R$ {{ chamado.orcamento }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Observação</label>
+                <textarea name="observacao" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-info">Confirmar</button>
+            <a href="{% url 'detalhar_chamado' chamado.pk %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

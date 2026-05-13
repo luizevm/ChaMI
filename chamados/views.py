@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Chamado, Imovel, Prestador, Perfil
-from .forms import AbrirChamadoForm, AtualizarChamadoForm, ImovelForm, PrestadorForm, InquilinoForm, PrestadorUserForm, OrcamentoForm, AdminForm
+from .forms import AbrirChamadoForm, AtualizarChamadoForm, ImovelForm, PrestadorForm, InquilinoForm, PrestadorUserForm, OrcamentoForm, AdminForm, EditarInquilinoForm, EditarAdminForm, EditarPrestadorUserForm
 from django.contrib.auth.models import User
 
 def get_perfil(user):
@@ -321,9 +321,10 @@ def cadastrar_inquilino(request):
             cpf = form.cleaned_data['cpf']
             nome = form.cleaned_data['nome']
             senha = form.cleaned_data['senha']
+            telefone = form.cleaned_data['telefone']
             imovel = form.cleaned_data['imovel']
             user = User.objects.create_user(username=cpf, password=senha, first_name=nome)
-            Perfil.objects.create(user=user, tipo='inquilino', imovel=imovel)
+            Perfil.objects.create(user=user, tipo='inquilino', imovel=imovel, telefone=telefone)
             return redirect('listar_inquilinos')
     else:
         form = InquilinoForm()
@@ -352,3 +353,112 @@ def cadastrar_admin(request):
     else:
         form = AdminForm()
     return render(request, 'chamados/admins/cadastrar.html', {'form': form})
+
+@login_required
+def editar_inquilino(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    inquilino = get_object_or_404(Perfil, pk=pk, tipo='inquilino')
+    if request.method == 'POST':
+        form = EditarInquilinoForm(request.POST, inquilino=inquilino)
+        if form.is_valid():
+            inquilino.user.first_name = form.cleaned_data['nome']
+            inquilino.telefone = form.cleaned_data['telefone']
+            nova_senha = form.cleaned_data['nova_senha']
+            if nova_senha:
+                inquilino.user.set_password(nova_senha)
+            inquilino.user.save()
+            inquilino.imovel = form.cleaned_data['imovel']
+            inquilino.save()
+            return redirect('listar_inquilinos')
+    else:
+        form = EditarInquilinoForm(
+            inquilino=inquilino,
+            initial={
+                'nome': inquilino.user.first_name,
+                'telefone': inquilino.telefone or '',
+                'imovel': inquilino.imovel
+            }
+        )
+    return render(request, 'chamados/inquilinos/editar.html', {'form': form, 'inquilino': inquilino})
+
+@login_required
+def excluir_inquilino(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    inquilino = get_object_or_404(Perfil, pk=pk, tipo='inquilino')
+    if request.method == 'POST':
+        inquilino.user.delete()
+        return redirect('listar_inquilinos')
+    return render(request, 'chamados/inquilinos/excluir.html', {'inquilino': inquilino})
+
+@login_required
+def editar_admin(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    admin = get_object_or_404(Perfil, pk=pk, tipo='admin')
+    if request.method == 'POST':
+        form = EditarAdminForm(request.POST)
+        if form.is_valid():
+            admin.user.first_name = form.cleaned_data['nome']
+            nova_senha = form.cleaned_data['nova_senha']
+            if nova_senha:
+                admin.user.set_password(nova_senha)
+            admin.user.save()
+            return redirect('listar_admins')
+    else:
+        form = EditarAdminForm(initial={'nome': admin.user.first_name})
+    return render(request, 'chamados/admins/editar.html', {'form': form, 'admin': admin})
+
+@login_required
+def excluir_admin(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    admin = get_object_or_404(Perfil, pk=pk, tipo='admin')
+    if request.method == 'POST':
+        admin.user.delete()
+        return redirect('listar_admins')
+    return render(request, 'chamados/admins/excluir.html', {'admin': admin})
+
+@login_required
+def editar_prestador_user(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    prestador_perfil = get_object_or_404(Perfil, pk=pk, tipo='prestador')
+    if request.method == 'POST':
+        form = EditarPrestadorUserForm(request.POST)
+        if form.is_valid():
+            prestador_perfil.user.first_name = form.cleaned_data['nome']
+            nova_senha = form.cleaned_data['nova_senha']
+            if nova_senha:
+                prestador_perfil.user.set_password(nova_senha)
+            prestador_perfil.user.save()
+            prestador_perfil.prestador = form.cleaned_data['prestador']
+            prestador_perfil.save()
+            return redirect('listar_prestadores')
+    else:
+        form = EditarPrestadorUserForm(initial={
+            'nome': prestador_perfil.user.first_name,
+            'prestador': prestador_perfil.prestador
+        })
+    return render(request, 'chamados/prestadores/editar_user.html', {'form': form, 'prestador_perfil': prestador_perfil})
+
+@login_required
+def excluir_prestador_user(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    prestador_perfil = get_object_or_404(Perfil, pk=pk, tipo='prestador')
+    if request.method == 'POST':
+        prestador_perfil.user.delete()
+        return redirect('listar_prestadores')
+    return render(request, 'chamados/prestadores/excluir_user.html', {'prestador_perfil': prestador_perfil})
+
+@login_required
+def desocupar_imovel(request, pk):
+    if not is_admin(request.user):
+        return redirect('listar_chamados')
+    imovel = get_object_or_404(Imovel, pk=pk)
+    if request.method == 'POST':
+        Perfil.objects.filter(imovel=imovel, tipo='inquilino').update(imovel=None)
+        return redirect('listar_imoveis')
+    return render(request, 'chamados/imoveis/desocupar.html', {'imovel': imovel})

@@ -2,13 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Imovel(models.Model):
+    TIPO_CHOICES = [
+        ('residencial', 'Residencial'),
+        ('comercial', 'Comercial'),
+        ('rural', 'Rural'),
+        ('industrial', 'Industrial'),
+    ]
+
     endereco = models.CharField(max_length=255)
     complemento = models.CharField(max_length=100, blank=True, null=True)
-    inquilino = models.CharField(max_length=100)
-    telefone = models.CharField(max_length=20)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='residencial')
 
     def __str__(self):
-        return self.endereco
+        return f'{self.endereco} ({self.get_tipo_display()})'
+
+    def esta_disponivel(self):
+        return not Perfil.objects.filter(imovel=self, tipo='inquilino').exists()
     
 class Prestador(models.Model):
     nome = models.CharField(max_length=100)
@@ -63,6 +72,7 @@ class Perfil(models.Model):
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     imovel = models.ForeignKey(Imovel, on_delete=models.SET_NULL, blank=True, null=True)
     prestador = models.ForeignKey(Prestador, on_delete=models.SET_NULL, blank=True, null=True)
+    telefone = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f'{self.user.username} — {self.get_tipo_display()}'

@@ -1,47 +1,58 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>ChaMI - Imóveis</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-4">
-    <h2>Imóveis Cadastrados</h2>
-    <a href="{% url 'cadastrar_imovel' %}" class="btn btn-primary mb-3">Novo Imóvel</a>
-    <a href="{% url 'listar_chamados' %}" class="btn btn-secondary mb-3">Voltar</a>
+{% extends 'chamados/base.html' %}
+{% block title %}Imóveis{% endblock %}
 
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>#</th>
-                <th>Endereço</th>
-                <th>Complemento</th>
-                <th>Inquilino</th>
-                <th>Telefone</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for imovel in imoveis %}
-            <tr>
-                <td>{{ imovel.id }}</td>
-                <td>{{ imovel.endereco }}</td>
-                <td>{{ imovel.complemento|default:"-" }}</td>
-                <td>{{ imovel.inquilino }}</td>
-                <td>{{ imovel.telefone }}</td>
-                <td>
-                    <a href="{% url 'editar_imovel' imovel.pk %}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'excluir_imovel' imovel.pk %}" class="btn btn-sm btn-danger">Excluir</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">Nenhum imóvel cadastrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-</body>
-</html>
+{% block content %}
+<h2>Imóveis Cadastrados</h2>
+<a href="{% url 'cadastrar_imovel' %}" class="btn btn-primary mb-3">Novo Imóvel</a>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Endereço</th>
+            <th>Complemento</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Inquilino</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for imovel in imoveis %}
+        <tr>
+            <td>{{ imovel.id }}</td>
+            <td>{{ imovel.endereco }}</td>
+            <td>{{ imovel.complemento|default:"-" }}</td>
+            <td>{{ imovel.get_tipo_display }}</td>
+            <td>
+                {% if imovel.esta_disponivel %}
+                    <span class="badge badge-success">Disponível</span>
+                {% else %}
+                    <span class="badge badge-danger">Alugado</span>
+                {% endif %}
+            </td>
+            <td>
+                {% for perfil in imovel.perfil_set.all %}
+                    {% if perfil.tipo == 'inquilino' %}
+                        {{ perfil.user.first_name }}
+                    {% endif %}
+                {% empty %}
+                    -
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{% url 'editar_imovel' imovel.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'excluir_imovel' imovel.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                {% if not imovel.esta_disponivel %}
+                <a href="{% url 'desocupar_imovel' imovel.pk %}" class="btn btn-sm btn-secondary">Desocupar</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">Nenhum imóvel cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

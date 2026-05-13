@@ -1,0 +1,24 @@
+{% extends 'chamados/base.html' %}
+{% block title %}Excluir Inquilino{% endblock %}
+
+{% block content %}
+<h2>Excluir Inquilino</h2>
+
+<div class="alert alert-danger">
+    Tem certeza que deseja excluir este inquilino? O acesso dele ao sistema será removido.
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>Nome:</strong> {{ inquilino.user.first_name }}</p>
+        <p><strong>CPF:</strong> {{ inquilino.user.username }}</p>
+        <p><strong>Imóvel:</strong> {{ inquilino.imovel }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+    <a href="{% url 'listar_inquilinos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

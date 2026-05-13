@@ -1,8 +1,8 @@
 {% extends 'chamados/base.html' %}
-{% block title %}Cadastrar Administrador{% endblock %}
+{% block title %}Editar Administrador{% endblock %}
 
 {% block content %}
-<h2>Cadastrar Administrador</h2>
+<h2>Editar Administrador</h2>
 <div class="card">
     <div class="card-body">
         <form method="POST">
@@ -12,14 +12,11 @@
                 {{ form.nome }}
             </div>
             <div class="form-group">
-                <label>CPF (somente números)</label>
-                {{ form.cpf }}
+                <label>Nova Senha</label>
+                {{ form.nova_senha }}
+                <small class="form-text text-muted">Deixe em branco para não alterar.</small>
             </div>
-            <div class="form-group">
-                <label>Senha</label>
-                {{ form.senha }}
-            </div>
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
             <a href="{% url 'listar_admins' %}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>

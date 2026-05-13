@@ -1,0 +1,23 @@
+{% extends 'chamados/base.html' %}
+{% block title %}Excluir Administrador{% endblock %}
+
+{% block content %}
+<h2>Excluir Administrador</h2>
+
+<div class="alert alert-danger">
+    Tem certeza que deseja excluir este administrador? O acesso dele ao sistema será removido.
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>Nome:</strong> {{ admin.user.first_name }}</p>
+        <p><strong>CPF:</strong> {{ admin.user.username }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+    <a href="{% url 'listar_admins' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
